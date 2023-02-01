@@ -10,7 +10,7 @@ module Memory (
 	
 	initial
 	begin
-		mem[0] = 16'h3002;
+		mem[0] = 16'h2002;
 		mem[1] = 16'h1003;
 		mem[2] = 16'h0007;
 		mem[3] = 16'h0005;
