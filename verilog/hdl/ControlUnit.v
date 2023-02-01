@@ -59,22 +59,23 @@ module ControlUnit (
 		.clk	(clk),
 		.out	(counter));
 		
-	assign SC_clr = T[3] & (D[7])								|
-						 T[4] & (D[3] | D[4])					|
-						 T[5] & (D[0] | D[1] | D[2] | D[5]) |
-						 T[6] & (D[6]);
+	assign SC_clr = T[3] & (D[7])					   |
+					T[4] & (D[3] | D[4])			   |
+					T[5] & (D[0] | D[1] | D[2] | D[5]) |
+					T[6] & (D[6]);
 						 
 	// Logic for the encoder
-	assign x[1] = (D[5] & T[5]) | (D[4] & T[4]);												// x1 = AR
-	assign x[2] = T[0] | (D[5] & T[4]);															// x2 = PC
-	assign x[3] = (D[2] & T[5]) | (D[6] & T[6]);												// x3 = DR
-	assign x[4] = (D[3] & T[4]);																	// x4 = AC
-	assign x[5] = (T[2]);																			// x5 = IR
-	assign x[6] = 1'b0;																				// x6 = TR
-	assign x[7] = (D[0] & T[4]) | (D[1] & T[4]) | (D[2] & T[4]) | (D[6] & T[4]);	// x7 = MEM
+	assign x[0] = 1'b0;
+	assign x[1] = (D[5] & T[5]) | (D[4] & T[4]);										// x1 = AR
+	assign x[2] = T[0] | (D[5] & T[4]);													// x2 = PC
+	assign x[3] = (D[2] & T[5]) | (D[6] & T[6]);										// x3 = DR
+	assign x[4] = (D[3] & T[4]);														// x4 = AC
+	assign x[5] = (T[2]);																// x5 = IR
+	assign x[6] = 1'b0;																	// x6 = TR
+	assign x[7] = T[1] | (D[0] & T[4]) | (D[1] & T[4]) | (D[2] & T[4]) | (D[6] & T[4]);	// x7 = MEM
 	
 	// Logic for AR Register:
-	assign LD_AR  = T[0] | T[2];
+	assign LD_AR  = (T[0] | T[2]) & (~reset);
 	assign INR_AR = D[5] & T[4];
 	assign CLR_AR = 1'b0;
 	
@@ -84,7 +85,7 @@ module ControlUnit (
 	assign CLR_PC = reset;	//There is no signal for clear the PC
 	
 	//Logic for DR Register:
-	assign LD_DR  = (D[0] & T[4]) | (D[1] & T[4]) | (D[2] | T[4]) | (D[6] & T[4]);
+	assign LD_DR  = (D[0] & T[4]) | (D[1] & T[4]) | (D[2] & T[4]) | (D[6] & T[4]);
 	assign INR_DR = D[6] & T[5];
 	assign CLR_DR = 1'b0;
 	
