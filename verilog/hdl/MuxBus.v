@@ -15,6 +15,7 @@ module MuxBus(
 	always @(selector, ar,pc,dr,ac,ir,tr,mem)
 	begin
 		case(selector)
+			3'd0: Bus = 16'd0;
 			3'd1:	Bus = ar;
 			3'd2:	Bus = pc;
 			3'd3:	Bus = dr;
