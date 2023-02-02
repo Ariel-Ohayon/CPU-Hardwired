@@ -37,7 +37,7 @@ module CPU (
 
 	wire [15:0]	Bus;
 	
-	wire	[15:0]	AC_in;
+	wire	[16:0]	AC_in;
 	//wire Ein,Eout;
 	
 	wire	[7:0]	x;
@@ -77,6 +77,9 @@ module CPU (
 		.reset		(reset),
 		.clk		(clk),
 		.ir			(IR_out),
+		.AC_in		(AC_in),
+		.AC_out		(AC_out),
+		.DR_out		(DR_out),
 		.op_and		(op_and),
 		.op_add		(op_add),
 		.op_dr		(op_dr),
