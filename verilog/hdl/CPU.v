@@ -37,13 +37,22 @@ module CPU (
 
 	wire [15:0]	Bus;
 	
-	wire	[7:0]	Control_Add_Logic;
 	wire	[15:0]	AC_in;
-	wire Ein,Eout;
+	//wire Ein,Eout;
 	
 	wire	[7:0]	x;
 
 	wire Read,Write;
+	
+	wire op_and;
+	wire op_add;
+	wire op_dr;
+	wire op_inpr;
+	wire op_com;
+	wire op_shr;
+	wire op_shl;
+	
+	wire op_ld;
 	
 	MuxBus	U1 (
 		.selector	(selector),
@@ -65,44 +74,59 @@ module CPU (
 		.data_out	(MEM_out));
 		
 	ControlUnit	U3 (
-		.reset	(reset),
-		.clk	(clk),
-		.ir		(IR_out),
-		.ld		({LD_AR,  LD_PC,  LD_DR,  LD_AC, LD_IR}),
-		.inr	({INR_AR, INR_PC, INR_DR, INR_AC}),
-		.clr	({CLR_AR, CLR_PC, CLR_DR, CLR_AC}),
-		.Read	(Read),
-		.Write	(Write),
-		.x		(x));
+		.reset		(reset),
+		.clk		(clk),
+		.ir			(IR_out),
+		.op_and		(op_and),
+		.op_add		(op_add),
+		.op_dr		(op_dr),
+		.op_inpr	(op_inpr),
+		.op_com		(op_com),
+		.op_shr		(op_shr),
+		.op_shl		(op_shl),
+		.op_ld		(op_ld),
+		.ld			({LD_AR,  LD_PC,  LD_DR,  LD_AC, LD_IR}),
+		.inr		({INR_AR, INR_PC, INR_DR, INR_AC}),
+		.clr		({CLR_AR, CLR_PC, CLR_DR, CLR_AC}),
+		.Read		(Read),
+		.Write		(Write),
+		.x			(x));
 	
 	Encoder	U4 (
 		.x			(x),
 		.selector	(selector));
 		
-	adder_and_logic #(16)	U5 (
-		.clk		(clk),
-		.AC			(AC_out),
-		.DR			(DR_out),
-		.INP		(INPR_out),
-		.ControlSig	(Control_Add_Logic),
-		.Eout_ff	(Eout),
-		.Ein_ff		(Ein),
-		.out		(AC_in));
+	//adder_and_logic #(16)	U5 (
+	//	.clk		(clk),
+	//	.AC			(AC_out),
+	//	.DR			(DR_out),
+	//	.INP		(INPR_out),
+	//	.ControlSig	({op_ld,op_shl,op_shr,op_com,op_inpr,op_dr,op_add,op_and}),
+	//	.Eout_ff	(Eout),
+	//	.Ein_ff		(Ein),
+	//	.out		(AC_in));
+	
+	Add_and_Logic	U5 (
+		.AC		(AC_out),
+		.DR		(DR_out),
+		.inpr	(INPR_out),
+		.opcode	({op_shl,op_shr,op_com,op_inpr,op_dr,op_add,op_and}),
+		.out	(AC_in));
 	
 	Reg #(12)	AR (
 		.clk		(clk),
-		.in			(Bus),
+		.in			(Bus[11:0]),
 		.Load		(LD_AR),
 		.Increment	(INR_AR),
-		.Clear		(CLR_AR),
+		.Clear		(CLR_AR | reset),
 		.out		(AR_out));
 		
 	Reg #(12)	PC (
 		.clk		(clk),
-		.in			(Bus),
+		.in			(Bus[11:0]),
 		.Load		(LD_PC),
 		.Increment	(INR_PC),
-		.Clear		(CLR_PC),
+		.Clear		(CLR_PC | reset),
 		.out		(PC_out));
 	
 	Reg #(16)	DR (
@@ -110,7 +134,7 @@ module CPU (
 		.in			(Bus),
 		.Load		(LD_DR),
 		.Increment	(INR_DR),
-		.Clear		(CLR_DR),
+		.Clear		(CLR_DR | reset),
 		.out		(DR_out));
 
 	Reg #(16)	AC (
@@ -118,7 +142,7 @@ module CPU (
 		.in			(AC_in),
 		.Load		(LD_AC),
 		.Increment	(INR_AC),
-		.Clear		(CLR_AC),
+		.Clear		(CLR_AC | reset),
 		.out		(AC_out));
 	
 	Reg #(16)	IR (
@@ -126,7 +150,7 @@ module CPU (
 		.in			(Bus),
 		.Load		(LD_IR),
 		.Increment	(1'b0),
-		.Clear		(1'b0),
+		.Clear		(reset),
 		.out		(IR_out));
 		
 	Reg #(16)	INPR (
@@ -134,7 +158,7 @@ module CPU (
 		.in			(INPR_in),
 		.Load		(1'b1),
 		.Increment	(1'b0),
-		.Clear		(1'b0),
+		.Clear		(reset),
 		.out		(INPR_out));
 	assign INPR_in = INPR_Register;
 	
@@ -143,7 +167,7 @@ module CPU (
 		.in			(Bus),
 		.Load		(LD_OUTR),
 		.Increment	(1'b0),
-		.Clear		(1'b0),
+		.Clear		(reset),
 		.out		(OUTR_out));
 	assign OUTR_Register = OUTR_out;
 endmodule
