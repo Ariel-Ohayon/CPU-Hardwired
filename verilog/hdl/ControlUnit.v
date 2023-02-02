@@ -4,6 +4,15 @@ module ControlUnit (
 
 	input	[15:0]	ir,
 
+	output			op_and,
+	output			op_add,
+	output			op_dr,
+	output			op_inpr,
+	output			op_com,
+	output			op_shr,
+	output			op_shl,
+	output			op_ld,
+	
 	output	[4:0]	ld,
 	output	[3:0]	inr,
 	output	[3:0]	clr,
@@ -59,6 +68,17 @@ module ControlUnit (
 		.clk	(clk),
 		.out	(counter));
 		
+	assign op_ld   = LD_AC;
+	assign op_and  = D[0];
+	assign op_add  = D[1];
+	assign op_dr   = D[2];
+	
+	assign op_inpr = T[3] & (D[7] &  ir[15] & ir[11]);
+	assign op_com  = T[3] & (D[7] & ~ir[15] & ir[9]);
+	assign op_shr  = T[3] & (D[7] & ~ir[15] & ir[7]);
+	assign op_shl  = T[3] & (D[7] & ~ir[15] & ir[6]);
+	
+		
 	assign SC_clr = T[3] & (D[7])					   |
 					T[4] & (D[3] | D[4])			   |
 					T[5] & (D[0] | D[1] | D[2] | D[5]) |
@@ -91,7 +111,7 @@ module ControlUnit (
 	
 	//Logic for AC Register:
 	assign LD_AC_r = D[7] & T[3] & (ir[9] | ir[7] | ir[6]);
-	assign LD_AC   = (D[0]  & T[5]) | (D[1] & T[5]) | (D[2] & T[5]) | LD_AC_r; //(D[7] & T[3]); - WHEN THERE IS D[7] NEED TO CHECK THE ADDR BITS
+	assign LD_AC   = (D[0]  & T[5]) | (D[1] & T[5]) | (D[2] & T[5]) | LD_AC_r;
 	assign INR_AC  = ir[5]  & D[7] & T[3];
 	assign CLR_AC  = ir[11] & D[7] & T[3];
 	
