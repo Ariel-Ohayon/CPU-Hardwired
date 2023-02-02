@@ -4,6 +4,10 @@ module ControlUnit (
 
 	input	[15:0]	ir,
 
+	input	[16:0]	AC_in,
+	input	[15:0]	AC_out,
+	input	[15:0]	DR_out,
+	
 	output			op_and,
 	output			op_add,
 	output			op_dr,
@@ -46,6 +50,8 @@ module ControlUnit (
 	wire CLR_PC;
 	wire CLR_DR;
 	wire CLR_AC;
+	
+	reg ACK_condition;
 
 	assign in_dec3x8 = ir[14:12];
 	
@@ -101,7 +107,7 @@ module ControlUnit (
 	
 	//Logic for PC Register:
 	assign LD_PC  = (D[4] & T[4]) | (D[5] & T[5]);
-	assign INR_PC = T[1];	// NEED TO COMPLETE THIS SIGNAL
+	assign INR_PC = T[1] | ACK_condition;	// NEED TO COMPLETE THIS SIGNAL
 	assign CLR_PC = reset;	//There is no signal for clear the PC
 	
 	//Logic for DR Register:
@@ -122,6 +128,22 @@ module ControlUnit (
 	assign Read  = T[1] | (D[0] & T[4]) | (D[1] & T[4]) | (D[2] & T[4]) | (D[6] & T[4]);
 	//Logic for Write Memory:
 	assign Write = (D[3] & T[4]) | (D[5] & T[4]) | (D[6] & T[6]);
+	
+	always @(D,T,ir,DR_out,AC_out,AC_in)
+	begin
+		if ((DR_out == 16'h0000) && (D[6] & T[6]))
+			ACK_condition = 1'b1;
+		else if ((AC_out[15] == 1'b0) && (D[7] & T[3] & ir[4]))
+			ACK_condition = 1'b1;
+		else if ((AC_out[15] == 1'b1) && (D[7] & T[3] & ir[3]))
+			ACK_condition = 1'b1;
+		else if ((AC_out == 16'h0000) && (D[7] & T[3] & ir[2]))
+			ACK_condition = 1'b1;
+		else if ((AC_in[16] == 1'b0) && (D[7] & T[3] & ir[1]))
+			ACK_condition = 1'b1;
+		else
+			ACK_condition = 1'b0;
+	end
 	
 endmodule
 
