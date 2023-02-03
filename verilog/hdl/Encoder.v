@@ -1,5 +1,5 @@
 module Encoder (
-	input			[7:0]	x,
+	input		[7:0]	x,
 	output reg	[2:0]	selector);
 	
 	always @(x)
