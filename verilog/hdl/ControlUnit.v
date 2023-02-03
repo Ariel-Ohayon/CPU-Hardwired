@@ -1,12 +1,12 @@
-module ControlUnit (
+module ControlUnit #(parameter Bits = 16) (
 	input		reset,
 	input		clk,
 
 	input	[15:0]	ir,
 
-	input	[16:0]	AC_in,
-	input	[15:0]	AC_out,
-	input	[15:0]	DR_out,
+	input	[Bits:0]	AC_in,
+	input	[Bits-1:0]	AC_out,
+	input	[Bits-1:0]	DR_out,
 	
 	output			op_and,
 	output			op_add,
