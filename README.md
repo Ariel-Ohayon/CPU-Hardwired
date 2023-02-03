@@ -58,7 +58,7 @@ There are some types of CPU architectures out there and they can be classified a
   <b>Design Stages:</b><br>
 <h5>&bull; Implementing the register modules and the memory of the CPU</h5>
 <h5>&bull; Implement the bus imterface between the modules</h5>
-  <b>Note:<b> As we can see in the architecture diagram the output of the bus connected to all the registers and the memory parallel inputs.<br>
+  <b>Note:</b> As we can see in the architecture diagram the output of the bus connected to all the registers and the memory parallel inputs.<br>
   And also the input of the bus get the output of all of this modules.<br>
   The problem with this is when we try to connect some output signals to the same signal we got a multiple driver for this signal<br>
   and our design can be damaged.<br>
