@@ -1,4 +1,4 @@
-# CPU-Hardwired Project
+# <h1 align = "center"> CPU-Hardwired Project </h1>
 
 <h2 align="center"> CPU design introduction </h2>
 There are some types of CPU architectures out there and they can be classified according to several types of architectures:
