@@ -32,13 +32,18 @@ There are some types of CPU architectures out there and they can be classified a
 <p> The hardwired architecture is a Von Neumann single cycle architecture <br>
     According to the figure below, this architecture consists a bus that connected to the CPU registers and the memory.
 </p>
-    <h4> Figure 1: Hardwired CPU Architecture </h4>
-    <img src = "https://user-images.githubusercontent.com/83784945/216547132-5251203e-6bbb-49aa-9654-375c783f22f8.png">
+
+<h4> Figure 1: Hardwired CPU Architecture </h4>
+<p align="center">
+  <img src = "https://user-images.githubusercontent.com/83784945/216547132-5251203e-6bbb-49aa-9654-375c783f22f8.png">
+</p>
 <p>
   The Hardwired CPU resgisters are described in the following table:
 </p>
   <h4> Figure 2: Hardwired Architecture Register Description </h4>
-  <img src = "https://user-images.githubusercontent.com/83784945/216549701-817403f5-74ee-4af9-abc4-0747af7a78b7.png">
+  <p align="center">
+    <img src = "https://user-images.githubusercontent.com/83784945/216549701-817403f5-74ee-4af9-abc4-0747af7a78b7.png">
+  </p>
   <b>Note</b>: In my design TR register does not currently exist because it used for interrupt,<br>
                and I still have not implement a hardware for executing ISR (Interrupt Service Routine).<br>
                
@@ -47,6 +52,7 @@ There are some types of CPU architectures out there and they can be classified a
   The instruction set of the Hardwired CPU is very basic and simple.<br>
   For each bit in the instruction has different meaning so we can easily decode the instruction into hardware to execution.<br>
   <h4>Figure 3: Hardwired CPU Instruction Set:</h4>
+<p align="center">
   <img src="https://user-images.githubusercontent.com/83784945/216560999-e9491b71-3dec-4624-a2e8-84f47f6f6cea.png">
 </p>
 
